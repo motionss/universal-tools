@@ -1,22 +1,5 @@
-import React, { useMemo, useState } from "react";
+import { useState, useMemo } from "react";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
-
-function Home() {
-  return (
-    <div className="flex justify-center">
-      <section className="w-full h-[640px]">
-        <Carousel
-          images={[
-            "https://source.unsplash.com/random/1920x640?workers",
-            "https://source.unsplash.com/random/1920x640?building",
-            "https://source.unsplash.com/random/1920x640?tools",
-            "https://source.unsplash.com/random/1920x640?gaming",
-          ]}
-        />
-      </section>
-    </div>
-  );
-}
 
 function Carousel({ images, startingIndex }) {
   const [items, setItems] = useState([]);
@@ -107,4 +90,4 @@ function Item({ link, position }) {
   );
 }
 
-export default Home;
+export default Carousel;

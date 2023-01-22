@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { MdSearch } from "react-icons/md";
 import { FiShoppingCart, FiLogIn } from "react-icons/fi";
 
-import { ReactComponent as Logo } from "./assets/universal_tools.svg";
+import { ReactComponent as Logo } from "../assets/universal_tools.svg";
 
 function Topbar() {
   const productInput = useRef(null);
