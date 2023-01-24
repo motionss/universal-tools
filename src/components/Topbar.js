@@ -8,12 +8,12 @@ import { ReactComponent as Logo } from "../assets/universal_tools.svg";
 function Topbar() {
   const productInput = useRef(null);
   return (
-    <header className="w-full">
-      <div className="w-full h-topbar-height px-96 relative flex">
+    <header className="w-full mx-auto">
+      <div className="w-full max-w-content-max-width mx-auto h-topbar-height relative flex">
         <Link to="/" className="w-max h-full cursor-pointer">
           <Logo className="h-full p-2" />
         </Link>
-        <div className="absolute h-full left-[calc(50vw-(365px/2))] flex items-center justify-center">
+        <div className="absolute h-full left-[calc(50%-(365px/2))] flex items-center justify-center">
           <form
             className="flex group"
             onSubmit={(ev) => {
@@ -44,11 +44,13 @@ function Topbar() {
       <div className="w-full h-3 mb-3 flex justify-center items-center text-neutral-200 hover:text-white text-sm font-bold select-none">
         ENVÍOS A TODO EL PAÍS
       </div>
-      <nav className="w-full h-10 px-96 flex justify-start bg-dewalt">
-        <LowerButton text="PRODUCTOS" />
-        <LowerButton text="NOVEDADES" />
-        <LowerButton text="SOPORTE" />
-      </nav>
+      <div className="w-full h-10 bg-dewalt">
+        <nav className="sm:w-full xl:w-content-max-width h-full mx-auto flex justify-start">
+          <LowerButton text="PRODUCTOS" />
+          <LowerButton text="NOVEDADES" />
+          <LowerButton text="SOPORTE" />
+        </nav>
+      </div>
     </header>
   );
 }
@@ -56,7 +58,7 @@ function Topbar() {
 function UpperButton({ icon, text }) {
   return (
     <div
-      className="h-full p-4 flex items-center text-neutral-200 border-solid border-white30
+      className="h-full p-4 flex items-center text-neutral-300 border-solid border-white30
                  hover:pb-5 hover:text-white active:pb-3 active:border-b-4 cursor-pointer transition-all"
     >
       {icon}

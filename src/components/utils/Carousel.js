@@ -33,8 +33,8 @@ function Carousel({ images, startingIndex }) {
         {items.map((v, i) => (
           <button
             key={i}
-            className={`w-10 h-full bg-black transition-all duration-500 ${
-              items.findIndex((i) => i.position === 0) === i ? "bg-opacity-100" : "bg-opacity-50"
+            className={`w-10 h-full bg-white transition-all duration-500 ${
+              items.findIndex((i) => i.position === 0) === i ? "bg-opacity-100" : "bg-opacity-30"
             }`}
             onClick={() => {
               if (i !== activeItem) onSelector(i, i - activeItem);
@@ -82,10 +82,10 @@ function Item({ link, position }) {
   return (
     <img
       src={link}
-      alt="lol"
+      alt="hola"
       draggable="false"
-      style={{ marginLeft: window.screen.width * position }}
-      className="absolute transition-all duration-500"
+      style={{ transform: `translateX(${window.screen.width * position}px)` }}
+      className="absolute h-full transition-all duration-500"
     />
   );
 }

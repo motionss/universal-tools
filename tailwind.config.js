@@ -2,10 +2,13 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    fontFamily: {
+      "sans-condensed": '"Open Sans Condensed"',
+    },
     extend: {
       colors: {
         white30: "#ffffff30",
-        dewalt: "#febd16",
+        dewalt: "#febd17",
         neutral: {
           950: "#0c0c0c",
         },
@@ -13,6 +16,12 @@ module.exports = {
       spacing: {
         "topbar-height": "var(--topbar-height)",
         inherit: "inherit",
+      },
+      width: {
+        "content-max-width": "var(--content-max-width)",
+      },
+      maxWidth: {
+        "content-max-width": "var(--content-max-width)",
       },
     },
   },
