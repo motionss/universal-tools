@@ -3,13 +3,13 @@ import Carousel from "./utils/Carousel";
 function Home() {
   return (
     <div className="w-full">
-      <section className="w-full h-[640px] overflow-hidden">
+      <section className="w-full h-[480px] overflow-hidden">
         <Carousel
           images={[
-            "https://ar.dewalt.global/sites/ar.dewalt.global/files/2022-02/xDW_PowerStack_Unveil_WebBanner_0.png.pagespeed.ic.-5Fgr6ec02.webp",
-            "https://ar.dewalt.global/sites/ar.dewalt.global/files/2021-01/xDW-Trade-Banner.jpg.pagespeed.ic.oo4Kyo2svA.webp",
-            "https://ar.dewalt.global/sites/ar.dewalt.global/files/2020-07/xDEWALT-Web-Banner-Group-2-SP_0.jpg.pagespeed.ic.DMIn_pnHHI.webp",
-            "https://ar.dewalt.global/sites/ar.dewalt.global/files/2020-03/xImage-DW_2000x600_0.jpg.pagespeed.ic.1rU-mJbsW0.webp",
+            "https://somosferreteria.cl/wp-content/uploads/2021/09/Banner_Dewalt_2.jpg",
+            "https://www.sgs-engineering.com/media/catalog/category/Multi-Tool-Banner-Desktop_1.jpg",
+            "https://i.shgcdn.com/d94965d4-7b8c-44b0-b4bc-829ccc5c5750/-/format/auto/-/preview/3000x3000/-/quality/lighter/",
+            "https://m.media-amazon.com/images/S/aplus-media/vc/c18fe86f-f3ff-4548-9e34-7f009fdf3406.__CR0,0,970,300_PT0_SX970_V1___.jpg",
           ]}
         />
       </section>
@@ -17,7 +17,7 @@ function Home() {
         <div className="w-content-max-width mx-auto">
           <div className="pt-20 pb-4">
             <h2 className="font-sans-condensed text-black text-4xl font-bold select-none">
-              CATEGORÍAS DESTACADAS
+              CATEGORÍAS POPULARES
             </h2>
           </div>
           <div className="flex justify-around gap-6 pb-12">
@@ -50,13 +50,14 @@ function Card({ link, title }) {
       className="grow w-0 h-[360px] border-solid border border-black border-opacity-40
                  flex flex-col justify-start hover:border-dewalt hover:grow-[1.2] 
                  transition-all duration-300 group"
-      href="#"
+      href="/"
     >
       <div className="max-w-full h-3/4 overflow-hidden flex justify-center items-center">
         <img
           className="w-full h-full object-contain group-hover:brightness-110 transition-all duration-300"
           src={link}
           draggable="false"
+          alt={title}
         ></img>
       </div>
       <div
