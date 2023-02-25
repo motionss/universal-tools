@@ -8,7 +8,11 @@ function Footer() {
     <footer className="w-content-max-width mx-auto">
       <div className="w-full py-8 h-64 flex items-center">
         <div className="w-60 shrink-0">
-          <img src="/universal-tools-logo.svg" className="h-28 px-7 object-contain" />
+          <img
+            src="/universal-tools-logo.svg"
+            className="h-28 px-7 object-contain"
+            alt="Universal Tools Logo"
+          />
           <div className="w-full h-8 mt-3 flex justify-around gap-1">
             <RoundedButton
               logo={<FaFacebookF size="20" className="z-0" />}
@@ -59,8 +63,8 @@ function Footer() {
             <LinkTo text="¿Cómo comprar?" link="/faq/como-comprar" />
             <LinkTo text="Métodos de pago" link="/faq/metodos-de-pago" />
             <LinkTo text="Formas de envío" link="/faq/envio" />
-            <div className="h-16 gap-2 flex mb-6">
-              <div className="w-fit grow pr-16">
+            <div className="h-16 flex items-center mb-6">
+              <div className="w-fit h-12 pr-16">
                 <img className="h-full object-contain" src="/mercado-pago.png" alt="Mercado Pago" />
               </div>
               <img
@@ -90,15 +94,6 @@ function LinkTo({ text, link }) {
 function RoundedButton({ logo, link }) {
   return (
     <div className="w-8 h-full relative group">
-      {/* <a
-        className="w-8 h-8 border-[16px] border-solid border-white rounded-3xl flex items-center justify-center group-hover:border transition-all"
-        href={link}
-        target="_blank"
-        rel="noreferrer"
-      ></a>
-      <div className="absolute top-0 left-0 ml-[6px] mt-[6px] text-black group-hover:text-white pointer-events-none transition-all">
-        {logo}
-      </div> */}
       <a
         className="w-8 h-8 flex items-center justify-center transition-all relative z-10 text-black hover:text-white
                    before:absolute before:w-full before:h-full before:border-[16px] before:border-white before:rounded-3xl

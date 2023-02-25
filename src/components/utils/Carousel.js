@@ -12,7 +12,7 @@ function Carousel({ images, startingIndex }) {
       })
     );
     setActiveItem(startingIndex ?? 0);
-  }, []);
+  }, [images, startingIndex]);
 
   const onSelector = (index) => {
     setItems(

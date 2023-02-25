@@ -107,12 +107,12 @@ q:after {
 
 /* Configuramos el texto que seleccionamos */
 ::-moz-selection {
-  background-color: var(--negro);
-  color: var(--blanco);
+  background-color: #febd16;
+  color: black;
 }
 ::selection {
-  background-color: var(--negro);
-  color: var(--blanco);
+  background-color: #febd16;
+  color: black;
 }
 
 /* Nivelamos problemas de tipografías y colocación de formularios */
