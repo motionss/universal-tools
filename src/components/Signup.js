@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { MdLockOutline, MdMailOutline, MdOutlineMarkEmailRead, MdError } from "react-icons/md";
+import {
+  MdLockOutline,
+  MdMailOutline,
+  MdOutlineMarkEmailRead,
+  MdError,
+  MdDone,
+} from "react-icons/md";
 import { HiOutlineIdentification } from "react-icons/hi";
 import {
   createUserWithEmailAndPassword,
@@ -19,6 +25,7 @@ function Signup() {
   const [lastNameInput, setLastNameInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [passwordConfirmInput, setPasswordConfirmInput] = useState("");
+  const [accountCreated, setAccountCreated] = useState("");
   const [step, setStep] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({ input: null, text: null });
@@ -36,11 +43,9 @@ function Signup() {
     ev.preventDefault();
     if (step !== "email" || emailInput === "") return;
 
-    const regex = new RegExp(
-      "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
-    );
-    if (regex.test(emailInput)) {
+    if (new RegExp(process.env.REACT_APP_REGEX_EMAIL).test(emailInput)) {
       setLoading(true);
+      await new Promise((r) => setTimeout(r, 1000));
 
       try {
         console.log(firebase.auth);
@@ -70,6 +75,7 @@ function Signup() {
             break;
           default:
             setError({ input: "email", text: e.message });
+            // TODO: Mandar error a DB
             break;
         }
         console.log(e.message);
@@ -83,7 +89,7 @@ function Signup() {
     ev.preventDefault();
     if (step !== "name" || (nameInput === "" && lastNameInput === "")) return;
 
-    const regex = new RegExp("^([a-zA-Z]+(([',. -][a-zA-Z])?[a-zA-Z]*)){2,}$");
+    const regex = new RegExp(process.env.REACT_APP_REGEX_NAME);
     if (regex.test(nameInput)) {
       if (regex.test(lastNameInput)) {
         setError({ input: null, text: null });
@@ -109,11 +115,10 @@ function Signup() {
       return;
     }
 
-    const regex = new RegExp("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}");
-
-    if (regex.test(passwordInput)) {
+    if (new RegExp(process.env.REACT_APP_REGEX_PWD).test(passwordInput)) {
       setError({ input: null, text: null });
       setLoading(true);
+      await new Promise((r) => setTimeout(r, 1000));
 
       try {
         const userCredential = await createUserWithEmailAndPassword(
@@ -129,23 +134,30 @@ function Signup() {
 
         console.log(encryptedData);
         await sendEmailVerification(user, {
-          url: `http://localhost:3000/login/user?p=${encodeURIComponent(encryptedData)}`,
+          url: `${process.env.REACT_APP_BASE_URL}/login/user?p=${encodeURIComponent(
+            encryptedData
+          )}`,
           handleCodeInApp: true,
         });
 
         await firebase.auth.signOut();
 
         setLoading(false);
+        setAccountCreated(true);
+
+        await new Promise((r) => setTimeout(r, 1000));
+
         setStep("validation");
       } catch (e) {
         setLoading(false);
         setError({ input: "password", text: e.message });
+        // TODO: Mandar error a DB
         console.log(e.message);
       }
     } else {
       setError({
         input: "password",
-        text: "La contraseña tiene que cumplir estos requisitos mínimos:<br>8 caractéres, 1 mayúscula, 1 minúscula y 1 número",
+        text: "La contraseña tiene que tener al menos 6 dígitos",
       });
     }
   };
@@ -204,7 +216,6 @@ function Signup() {
               <InputLabel text="E-mail" error={error.input === "email"} />
               <input
                 type="email"
-                focus={true}
                 disabled={step !== "email"}
                 onChange={(ev) => {
                   onInputChange("email", ev.target.value);
@@ -320,6 +331,7 @@ function Signup() {
           submitable={passwordInput !== "" && passwordConfirmInput !== ""}
           submitText="Crear cuenta"
           loading={loading}
+          accountCreated={accountCreated}
           onSubmit={checkPassword}
         />
         <Step
@@ -332,9 +344,9 @@ function Signup() {
           state={step === "validation" ? "active" : step === "finished" ? "done" : "inactive"}
           inputs={
             <>
-              <span className="block mb-8 text-xl">Tu cuenta ha sido creada!</span>
+              <span className="block mb-8 text-xl">Tu cuenta ha sido creada con éxito!</span>
               <span>
-                Ingresá al link de verificación que te enviamos a:
+                Para terminar, ingresá al link de verificación que te enviamos a:
                 <br />
                 <strong>{emailInput}</strong>
               </span>
@@ -365,6 +377,7 @@ function Step({
   error = { input: null, text: null },
   submitable = false,
   submitText = "Continuar",
+  accountCreated = false,
   loading = false,
   onSubmit,
   noSubmit = false,
@@ -385,7 +398,10 @@ function Step({
         {icon}
         <span className="ml-4 text-lg">{titles[state]}</span>
       </div>
-      <form onSubmit={(ev) => onSubmit(ev)} className="mt-5">
+      <form
+        onSubmit={(ev) => onSubmit(ev)}
+        className={`mt-5 ${state === "done" || state === "inactive" ? "hidden" : ""}`}
+      >
         {inputs}
         <div className="w-full h-10 flex items-end">
           <div
@@ -406,14 +422,18 @@ function Step({
           <button
             type="submit"
             className={`h-12 px-4 overflow-y-hidden flex flex-col justify-start items-center font-bold transition-all ${
-              loading
+              loading || accountCreated
                 ? "bg-black text-dewalt"
                 : submitable
                 ? "bg-black text-white hover:text-dewalt active:pt-1"
                 : "bg-neutral-300 text-neutral-500"
             }`}
           >
-            <span className={`transition-all duration-300 ${loading ? "-mt-9" : "mt-3"}`}>
+            <span
+              className={`transition-all duration-300 ${
+                accountCreated ? "-mt-[5.25rem]" : loading ? "-mt-9" : "mt-3"
+              }`}
+            >
               {submitText}
             </span>
             <img
@@ -421,6 +441,7 @@ function Step({
               className={`w-6 h-6 transition-all duration-200 mt-6`}
               alt="Loading"
             />
+            <MdDone className="w-6 h-6 mt-6" />
           </button>
         )}
       </form>

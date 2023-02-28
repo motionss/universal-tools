@@ -2,13 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import { BsPersonCircle } from "react-icons/bs";
-import { MdError, MdOutlineVerifiedUser, MdClose } from "react-icons/md";
+import { MdError, MdOutlineVerifiedUser, MdClose, MdDone } from "react-icons/md";
 import { RiRotateLockFill } from "react-icons/ri";
+
 import { useAuthContext } from "./utils/AuthContext";
 
 import {
   fetchSignInMethodsForEmail,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
@@ -59,11 +61,7 @@ function Login({ step }) {
   const handleCredentialsLogin = async (ev) => {
     ev.preventDefault();
     if (step === "email" && emailInput !== "") {
-      if (
-        new RegExp(
-          "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
-        ).test(emailInput)
-      ) {
+      if (new RegExp(process.env.REACT_APP_REGEX_EMAIL).test(emailInput)) {
         setLoading(true);
         await new Promise((r) => setTimeout(r, 1000));
         try {
@@ -87,6 +85,7 @@ function Login({ step }) {
               break;
             default:
               setError({ input: "email", code: e.code, text: e.message });
+              // TODO: Mandar error a DB
               break;
           }
           console.log(e.message);
@@ -97,82 +96,128 @@ function Login({ step }) {
     } else if (step === "password" && passwordInput !== "") {
       setLoading(true);
       await new Promise((r) => setTimeout(r, 1000));
-      signInWithEmailAndPassword(firebase.auth, emailInput, passwordInput)
-        .then((userCredentials) => {
-          // Signed in
-          const user = userCredentials.user;
+      try {
+        const userCredentials = await signInWithEmailAndPassword(
+          firebase.auth,
+          emailInput,
+          passwordInput
+        );
+        // Signed in
+        const user = userCredentials.user;
+        setLoading(false);
 
-          // Si el usuario todavía no validó el e-mail, muestro un error
-          // y cierro la sesión
-          if (!user.emailVerified) {
-            setLoading(false);
+        // Si el usuario todavía no validó el e-mail, muestro un error
+        // y cierro la sesión
+        if (user.emailVerified) {
+          setFirebase({ ...firebase, user: user });
+          await new Promise((r) => setTimeout(r, 1000));
+          navigate("/");
+        } else {
+          setError({
+            input: "email",
+            code: "auth/email-not-verified", // Este codigo lo invente yo
+            text: "El e-mail ingresado todavía no está verificado",
+          });
+          firebase.auth.signOut();
+        }
+      } catch (err) {
+        setLoading(false);
+        switch (err.code) {
+          case "auth/user-not-found":
+            setError({
+              input: "login",
+              code: err.code,
+              text: "No existe un usuario con ese e-mail",
+            });
+            break;
+          case "auth/invalid-email":
             setError({
               input: "email",
-              code: "auth/email-not-verified",
-              text: "El e-mail ingresado todavía no está verificado",
+              code: err.code,
+              text: "El e-mail ingresado es inválido",
             });
-            firebase.auth.signOut();
-          } else {
-            setFirebase({ ...firebase, user: user });
-            navigate("/");
-          }
-        })
-        .catch((err) => {
-          console.log(`ERROR! Codigo ${err.code}.\n${err.message}`);
-
-          setLoading(false);
-          switch (err.code) {
-            case "auth/user-not-found":
-              setError({
-                input: "login",
-                code: err.code,
-                text: "No existe un usuario con ese e-mail",
-              });
-              break;
-            case "auth/invalid-email":
-              setError({
-                input: "email",
-                code: err.code,
-                text: "El e-mail ingresado es inválido",
-              });
-              break;
-            case "auth/wrong-password":
-              setError({
-                input: "password",
-                code: err.code,
-                text: "La contraseña ingresada es incorrecta",
-              });
-              break;
-            case "auth/too-many-requests":
-              setError({
-                input: "login",
-                code: err.code,
-                text: "Demasiados intentos, espere unos minutos",
-              });
-              break;
-            default:
-              setError({ input: "login", code: err.code, text: "Error desconocido" });
-              break;
-          }
-        });
+            break;
+          case "auth/wrong-password":
+            setError({
+              input: "password",
+              code: err.code,
+              text: "La contraseña ingresada es incorrecta",
+            });
+            break;
+          case "auth/too-many-requests":
+            setError({
+              input: "login",
+              code: err.code,
+              text: "Demasiados intentos, espere unos minutos",
+            });
+            break;
+          default:
+            setError({ input: "login", code: err.code, text: "Error desconocido" });
+            // TODO: Mandar error a DB
+            break;
+        }
+        console.log(err);
+      }
     }
   };
 
-  const handleGoogleLogin = () => {
-    // Muestro un popup para que el usuario inicie sesión con Google
-    signInWithPopup(firebase.auth, new GoogleAuthProvider())
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const token = GoogleAuthProvider.credentialFromResult(result).accessToken;
-        setFirebase({ ...firebase, user: result.user, googleAccessToken: token });
-        navigate("/");
-        // IdP data available using getAdditionalUserInfo(result)
-      })
-      .catch((err) => {
-        setLoading(false);
-        // TODO: Mostrar errores personalizados por cada err.code
-        setError([{ input: "login", code: err.code, text: err.message }]);
+  const handleGoogleLogin = async () => {
+    try {
+      // Muestro un popup para que el usuario inicie sesión con Google
+      const result = await signInWithPopup(firebase.auth, new GoogleAuthProvider());
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const token = GoogleAuthProvider.credentialFromResult(result).accessToken;
+      setFirebase({ ...firebase, user: result.user, googleAccessToken: token });
+      navigate("/");
+      // IdP data available using getAdditionalUserInfo(result)
+    } catch (err) {
+      setLoading(false);
+      switch (err.code) {
+        case "auth/popup-blocked":
+          setError([
+            {
+              input: "login",
+              code: err.code,
+              text: "Habilitá los pop-ups para poder acceder con Google",
+            },
+          ]);
+          break;
+        case "auth/popup-closed-by-user":
+          break;
+        default:
+          setError([
+            {
+              input: "login",
+              code: err.code,
+              text: err.message,
+            },
+          ]);
+          // TODO: Mandar error a DB
+          break;
+      }
+      console.log(err);
+    }
+  };
+
+  const handleForgotPass = async () => {
+    try {
+      setLoading(true);
+      await sendPasswordResetEmail(firebase.auth, emailInput);
+      const data = { ue: emailInput };
+      const encryptedData = AES.encrypt(JSON.stringify(data), "xd").toString();
+
+      setLoading(false);
+      navigate(`/login/forgot?p=${encodeURIComponent(encryptedData)}`);
+    } catch (err) {
+      setLoading(false);
+      setError({
+        input: "login",
+        code: err.code ?? null,
+        text: err.message ?? "Error desconocido",
       });
+      // TODO: Mandar error a DB
+      console.log(err);
+    }
   };
 
   return (
@@ -227,8 +272,8 @@ function Login({ step }) {
           {step === "password" ? (
             <>
               <span className="block font-bold text-sm mb-1">Necesito ayuda</span>
-              <Link
-                to="/forgot"
+              <button
+                onClick={handleForgotPass}
                 className="w-56 h-10 flex justify-start items-center 
                            hover:bg-black hover:text-white active:text-neutral-400 transition-all group"
               >
@@ -237,7 +282,7 @@ function Login({ step }) {
                   size="20"
                 />
                 <span className="text-sm select-none">Olvidé mi contraseña</span>
-              </Link>
+              </button>
             </>
           ) : (
             ""
@@ -306,18 +351,19 @@ function Login({ step }) {
               />
             </div>
             <div
-              className={`w-full ${
+              className={`w-full  ${
                 error.text !== null ? "h-5 mt-5 mb-2" : "h-0 mt-12"
               } overflow-y-hidden text-red-700 flex justify-start items-center transition-all`}
+              tabIndex="-1"
             >
               <MdError size="20" className="w-5 h-5" />
               <span className="grow ml-1">{error.text}</span>
             </div>
-            <div className="w-full flex items-center overflow-hidden">
+            <div className="w-full flex items-center">
               <button
                 type="submit"
-                className={`w-36 h-12 flex flex-col justify-start items-center font-bold transition-all ${
-                  loading
+                className={`w-36 h-12 overflow-y-hidden flex flex-col justify-start items-center font-bold transition-all ${
+                  loading || firebase.user !== null
                     ? "bg-black text-dewalt"
                     : (step === "email" && emailInput !== "") ||
                       (step === "password" && passwordInput !== "")
@@ -325,14 +371,23 @@ function Login({ step }) {
                     : "bg-neutral-300 text-neutral-500"
                 }`}
               >
-                <span className={`transition-all duration-300 ${loading ? "-mt-9" : "mt-3"}`}>
+                <span
+                  className={`transition-all duration-300 ${
+                    !loading && firebase.user !== null
+                      ? "-mt-[5.25rem]"
+                      : loading
+                      ? "-mt-9"
+                      : "mt-3"
+                  }`}
+                >
                   {step === "email" ? "Continuar" : step === "password" ? "Iniciar sesión" : ""}
                 </span>
                 <img
                   src="/loading.svg"
                   className={`w-6 h-6 transition-all duration-200 mt-6`}
                   alt="Loading"
-                ></img>
+                />
+                <MdDone className="w-6 h-6 mt-6" />
               </button>
               {step === "email" ? (
                 <div className="grow flex flex-col items-end ml-8">

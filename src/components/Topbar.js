@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 
 import { MdSearch } from "react-icons/md";
-import { FiShoppingCart, FiChevronDown, FiChevronRight, FiLogIn } from "react-icons/fi";
+import { FiShoppingCart, FiChevronDown, FiChevronRight } from "react-icons/fi";
 import { BsPersonCircle } from "react-icons/bs";
 
 import { useAuthContext } from "./utils/AuthContext";

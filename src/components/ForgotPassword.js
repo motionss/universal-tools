@@ -1,69 +1,79 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link, redirect, useSearchParams } from "react-router-dom";
 
-import { MdLockOutline, MdMailOutline, MdOutlineMarkEmailRead, MdError } from "react-icons/md";
-import { HiOutlineIdentification } from "react-icons/hi";
-import {
-  createUserWithEmailAndPassword,
-  fetchSignInMethodsForEmail,
-  sendEmailVerification,
-  updateProfile,
-} from "firebase/auth";
-import { AES } from "crypto-js";
+import { BsPersonCircle } from "react-icons/bs";
+
 import { useAuthContext } from "./utils/AuthContext";
+
+import { AES, enc } from "crypto-js";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 function ForgotPassword() {
   const { firebase } = useAuthContext();
+  const searchParams = useSearchParams()[0];
 
+  const resendTime = 30;
+  const [sendable, setSendable] = useState(false);
   const [emailInput, setEmailInput] = useState("");
-  const [nameInput, setNameInput] = useState("");
-  const [lastNameInput, setLastNameInput] = useState("");
-  const [passwordInput, setPasswordInput] = useState("");
-  const [passwordConfirmInput, setPasswordConfirmInput] = useState("");
-  const [step, setStep] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({ input: null, text: null });
+  const [timer, setTimer] = useState(resendTime);
 
-  const nameInputRef = useRef(null);
-  const lastNameInputRef = useRef(null);
-  const passwordInputRef = useRef(null);
-  const passwordConfirmInputRef = useRef(null);
+  const emailInputRef = useRef(null);
 
-  const checkEmail = async (ev) => {
-    ev.preventDefault();
-    if (step !== "email" || emailInput === "") return;
-
-    const regex = new RegExp(
-      "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
-    );
-    if (regex.test(emailInput)) {
-      setLoading(true);
-
+  useEffect(() => {
+    if (searchParams.has("p")) {
       try {
-        console.log(firebase.auth);
-        const methods = await fetchSignInMethodsForEmail(firebase.auth, emailInput);
+        const encryptedData = decodeURIComponent(searchParams.get("p"));
+        const str = AES.decrypt(encryptedData, "xd").toString(enc.Utf8);
+        const decryptedData = JSON.parse(str);
 
-        setLoading(false);
-
-        if (methods.length > 0)
-          setError({ input: "email", text: "Ya hay una cuenta asociada a ese e-mail" });
-        else {
-          setError({ input: null, text: null });
-          setStep("name");
+        // ue = User E-mail (mail para recuperar la contraseña)
+        if ("ue" in decryptedData) {
+          const email = decryptedData["ue"];
+          setEmailInput(email);
+          emailInputRef.current.value = email;
         }
-      } catch (e) {
-        setLoading(false);
-        switch (e.code) {
-          case "auth/invalid-email":
-            setError({ input: "email", text: "E-mail inválido" });
-            break;
-          default:
-            setError({ input: "email", text: e.message });
-            break;
-        }
-        console.log(e.message);
+      } catch (err) {
+        console.log(err);
+        // TODO: Mandar error a DB
+        return redirect("/nf");
       }
     } else {
-      setError({ input: "email", text: "E-mail inválido" });
+      return redirect("/nf");
+    }
+  }, [searchParams]); //eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (timer === 0) {
+      setSendable(true);
+      return;
+    }
+    const updateTimer = async () => {
+      await new Promise((r) => setTimeout(r, 1000));
+      setTimer(timer - 1);
+    };
+    updateTimer();
+  }, [timer]);
+
+  const handleResend = async () => {
+    if (sendable) {
+      setLoading(true);
+      try {
+        await sendPasswordResetEmail(firebase.auth, emailInput);
+        setLoading(false);
+        setSendable(false);
+        setTimer(resendTime);
+      } catch (err) {
+        setLoading(false);
+        setError({
+          input: "reset",
+          code: err.code ?? null,
+          text: err.message ?? "Error desconocido",
+        });
+        // TODO: Mandar error a DB
+        console.log(err);
+      }
     }
   };
 
@@ -71,21 +81,64 @@ function ForgotPassword() {
     <section className="w-full grow bg-white">
       <div className="w-[900px] mx-auto py-12 flex text-black">
         <div className="w-0 grow">
-          <h1 className="font-thin text-4xl pb-4">Ingresá el código que te enviamos por SMS</h1>
+          <h1 className="font-thin text-4xl pb-4">Revisá tu correo</h1>
+
+          <div
+            className="w-72 h-12 mb-3 py-2 flex items-center
+                         border border-black"
+          >
+            <BsPersonCircle className="w-6 h-6 mx-4 text-neutral-400" />
+            <div className="grow flex flex-col text-xs">
+              <span>{emailInput}</span>
+              <Link
+                className="w-max text-dewalt hover:text-amber-600 transition-all"
+                to="/login/user"
+              >
+                Entrar a otra cuenta
+              </Link>
+            </div>
+          </div>
         </div>
         <div className="w-0 grow-[1.2]">
-          <form className="w-full p-10 border border-black"></form>
+          <div className="w-full p-10 border border-black">
+            <input type="email" className="hidden" hidden ref={emailInputRef} disabled readOnly />
+            <div>Te enviamos un e-mail para cambiar tu contraseña a:</div>
+            <div className="mb-8 font-bold">{emailInput}</div>
+            <div className="mb-2">¿No te llegó?</div>
+            <div className="flex items-center">
+              <button
+                type="button"
+                onClick={handleResend}
+                className={`w-36 h-12 overflow-y-hidden flex flex-col justify-start items-center font-bold transition-all ${
+                  loading
+                    ? "bg-black text-dewalt"
+                    : sendable
+                    ? "bg-dewalt text-black hover:bg-black hover:text-dewalt active:pt-1"
+                    : "bg-neutral-300 text-neutral-500"
+                }`}
+              >
+                <span className={`transition-all duration-300 ${loading ? "-mt-9" : "mt-3"}`}>
+                  Reenviar
+                </span>
+                <img
+                  src="/loading.svg"
+                  className={`w-6 h-6 transition-all duration-200 mt-6`}
+                  alt="Loading"
+                />
+              </button>
+              {timer > 0 ? (
+                <span className="ml-3 text-sm text-neutral-400">
+                  Podés reenviar el e-mail en 00:
+                  {timer.toLocaleString("en-US", { minimumIntegerDigits: 2, useGrouping: false })}
+                </span>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function InputLabel({ text, error }) {
-  return (
-    <label>
-      <span className={`block text-sm ${error ? "text-red-600" : ""}`}>{text}</span>
-    </label>
   );
 }
 
