@@ -13,6 +13,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import ForgotPassword from "./components/ForgotPassword";
+import Categories from "./components/Categories";
 import Footer from "./components/Footer";
 
 import { AuthContext } from "./components/utils/AuthContext";
@@ -20,6 +21,7 @@ import { AuthContext } from "./components/utils/AuthContext";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { useState } from "react";
+import Catalogue from "./components/Catalogue";
 
 function App() {
   // Your web app's Firebase configuration
@@ -56,6 +58,8 @@ function App() {
               <Route path="forgot" element={<ForgotPassword />} />
             </Route>
             <Route path="signup" element={<Signup />} />
+            <Route path="categories" element={<Categories />} />
+            <Route path="catalogue" element={<Catalogue />} />
             <Route path="ups" element={<NotFound />} />
             <Route path="*" element={<Navigate to="ups" />} />
           </Routes>

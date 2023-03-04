@@ -1,4 +1,5 @@
 import Carousel from "./utils/Carousel";
+import Card from "./utils/Card";
 
 function Home() {
   return (
@@ -16,57 +17,35 @@ function Home() {
       <section className="w-full bg-white">
         <div className="w-content-max-width mx-auto">
           <div className="pt-20 pb-4">
-            <h2 className="font-sans-condensed text-black text-4xl font-bold select-none">
+            <h1 className="font-sans-condensed text-black text-4xl font-bold">
               CATEGORÍAS POPULARES
-            </h2>
+            </h1>
           </div>
           <div className="flex justify-around gap-6 pb-12">
             <Card
-              link="https://bynder.sbdinc.com/m/35fdf9cc01fd1f62/Drupal_Small-DWHT0-20544_2.jpg"
+              img="https://bynder.sbdinc.com/m/35fdf9cc01fd1f62/Drupal_Small-DWHT0-20544_2.jpg"
               title="Herramientas Manuales"
+              link="catalogue?q=manuales"
             />
             <Card
-              link="https://bynder.sbdinc.com/m/340b7afb8bca1ec9/Drupal_Small-DCD795P2_F1.jpg"
+              img="https://bynder.sbdinc.com/m/340b7afb8bca1ec9/Drupal_Small-DCD795P2_F1.jpg"
               title="Herramientas Eléctricas"
+              link="catalogue?q=electricas"
             />
             <Card
-              link="https://bynder.sbdinc.com/m/87add7bcfcef6d95/Drupal_Small-DT99560_1.jpg"
+              img="https://bynder.sbdinc.com/m/87add7bcfcef6d95/Drupal_Small-DT99560_1.jpg"
               title="Accesorios e Insumos"
+              link="catalogue?q=accesorios"
             />
             <Card
-              link="https://www.dewalt.es/EMEA/PRODUCT/IMAGES/HIRES/DCB184G-XJ/DCB184G_1.jpg?resize=530x530"
+              img="https://www.dewalt.es/EMEA/PRODUCT/IMAGES/HIRES/DCB184G-XJ/DCB184G_1.jpg?resize=530x530"
               title="Baterías y Cargadores"
+              link="catalogue?q=baterias"
             />
           </div>
         </div>
       </section>
     </div>
-  );
-}
-
-function Card({ link, title }) {
-  return (
-    <a
-      className="grow w-0 h-[360px] border-solid border border-black border-opacity-40
-                 flex flex-col justify-start hover:border-dewalt hover:grow-[1.2] 
-                 transition-all duration-300 group"
-      href="/"
-    >
-      <div className="max-w-full h-3/4 overflow-hidden flex justify-center items-center">
-        <img
-          className="w-full h-full object-contain group-hover:brightness-110 transition-all duration-300"
-          src={link}
-          draggable="false"
-          alt={title}
-        ></img>
-      </div>
-      <div
-        className="w-full grow pt-4 items-start text-black text-lg font-bold
-                   flex justify-center select-none"
-      >
-        {title}
-      </div>
-    </a>
   );
 }
 

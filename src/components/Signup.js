@@ -37,6 +37,7 @@ function Signup() {
 
   useEffect(() => {
     setStep("email");
+    setError({ input: null, text: null });
   }, []);
 
   const checkEmail = async (ev) => {
@@ -209,7 +210,6 @@ function Signup() {
             active: "Ingresá tu e-mail",
             done: "E-mail ingresado ✓",
           }}
-          first={true}
           state={step === "email" ? "active" : emailInput !== "" ? "done" : "inactive"}
           inputs={
             <>
@@ -371,7 +371,6 @@ function InputLabel({ text, error }) {
 function Step({
   icon,
   titles,
-  first = false,
   state = "inactive",
   inputs,
   error = { input: null, text: null },
@@ -386,7 +385,7 @@ function Step({
     <div
       className={`w-full ${
         state === "active" ? "h-[260px]" : "h-12"
-      } overflow-y-hidden px-2 border ${!first ? "border-t-0" : ""} border-black ${
+      } overflow-y-hidden px-2 border first:border-t-0 border-black ${
         state === "done" ? "bg-black border-b-white" : ""
       } transition-all duration-700`}
     >
