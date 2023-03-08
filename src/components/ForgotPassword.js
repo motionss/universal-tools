@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, redirect, useSearchParams } from "react-router-dom";
 
 import { BsPersonCircle } from "react-icons/bs";
@@ -16,7 +16,7 @@ function ForgotPassword() {
   const [sendable, setSendable] = useState(false);
   const [emailInput, setEmailInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState({ input: null, text: null });
+  const [error, setError] = useState({ input: null, text: null }); //eslint-disable-line no-unused-vars
   const [timer, setTimer] = useState(resendTime);
 
   const emailInputRef = useRef(null);
@@ -78,20 +78,19 @@ function ForgotPassword() {
   };
 
   return (
-    <section className="w-full grow bg-white">
+    <section className="w-full grow bg-pagebg">
       <div className="w-[900px] mx-auto py-12 flex text-black">
         <div className="w-0 grow">
           <h1 className="font-thin text-4xl pb-4">Revisá tu correo</h1>
-
           <div
             className="w-72 h-12 mb-3 py-2 flex items-center
-                         border border-black"
+                         bg-white rounded-md border border-gray-300 shadow-sm"
           >
             <BsPersonCircle className="w-6 h-6 mx-4 text-neutral-400" />
-            <div className="grow flex flex-col text-xs">
-              <span>{emailInput}</span>
+            <div className="grow flex flex-col">
+              <span className="text-xs">{emailInput}</span>
               <Link
-                className="w-max text-dewalt hover:text-amber-600 transition-all"
+                className="w-max text-xs font-semibold text-amber-600 transition-all"
                 to="/login/user"
               >
                 Entrar a otra cuenta
@@ -100,7 +99,7 @@ function ForgotPassword() {
           </div>
         </div>
         <div className="w-0 grow-[1.2]">
-          <div className="w-full p-10 border border-black">
+          <div className="w-full p-10 bg-white border border-gray-300 rounded-md shadow-sm">
             <input type="email" className="hidden" hidden ref={emailInputRef} disabled readOnly />
             <div>Te enviamos un e-mail para cambiar tu contraseña a:</div>
             <div className="mb-8 font-bold">{emailInput}</div>
@@ -115,7 +114,7 @@ function ForgotPassword() {
                     : sendable
                     ? "bg-dewalt text-black hover:bg-black hover:text-dewalt active:pt-1"
                     : "bg-neutral-300 text-neutral-500"
-                }`}
+                } rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-black`}
               >
                 <span className={`transition-all duration-300 ${loading ? "-mt-9" : "mt-3"}`}>
                   Reenviar

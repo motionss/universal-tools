@@ -1,10 +1,11 @@
+import { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Outlet,
   useSearchParams,
-  Navigate,
+  useLocation,
 } from "react-router-dom";
 
 import NotFound from "./components/NotFound";
@@ -42,30 +43,34 @@ function App() {
   auth.useDeviceLanguage();
   const user = auth.currentUser;
 
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
   // Inicializo el user que se va a usar en el UserContext
   const [firebase, setFirebase] = useState({ auth: auth, user: user });
 
   return (
     <div className="w-full overflow-x-hidden min-h-screen bg-neutral-950 flex flex-col scroll-smooth">
-      <Router>
-        <AuthContext.Provider value={{ firebase, setFirebase }}>
-          <Topbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="login/user" element={<Login step="email" />} />
-            <Route path="login" element={<RouteWithParams params={["p"]} />}>
-              <Route path="pass" element={<Login step="password" />} />
-              <Route path="forgot" element={<ForgotPassword />} />
-            </Route>
-            <Route path="signup" element={<Signup />} />
-            <Route path="categories" element={<Categories />} />
-            <Route path="catalogue" element={<Catalogue />} />
-            <Route path="ups" element={<NotFound />} />
-            <Route path="*" element={<Navigate to="ups" />} />
-          </Routes>
-        </AuthContext.Provider>
-        <Footer />
-      </Router>
+      <AuthContext.Provider value={{ firebase, setFirebase }}>
+        <Topbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="login/user" element={<Login step="email" />} />
+          <Route path="login" element={<RouteWithParams params={["p"]} />}>
+            <Route path="pass" element={<Login step="password" />} />
+            <Route path="forgot" element={<ForgotPassword />} />
+          </Route>
+          <Route path="signup" element={<Signup />} />
+          <Route path="categories" element={<Categories />} />
+          <Route path="catalogue" element={<Catalogue />} />
+          <Route path="catalogue/:search" element={<Catalogue />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AuthContext.Provider>
+      <Footer />
     </div>
   );
 }
@@ -78,4 +83,10 @@ function RouteWithParams({ params, all = true }) {
   return paramsExist ? <Outlet /> : <NotFound />;
 }
 
-export default App;
+// Esto lo hice para poder usar el location en el useEffect y mandar scrollToTop en todas al abrir cada pagina
+// eslint-disable-next-line
+export default () => (
+  <Router>
+    <App />
+  </Router>
+);

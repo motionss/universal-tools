@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react"; //eslint-disable-line no-unused-vars
 
 import {
   MdLockOutline,
@@ -26,7 +26,7 @@ function Signup() {
   const [passwordInput, setPasswordInput] = useState("");
   const [passwordConfirmInput, setPasswordConfirmInput] = useState("");
   const [accountCreated, setAccountCreated] = useState("");
-  const [step, setStep] = useState("");
+  const [step, setStep] = useState("email");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({ input: null, text: null });
 
@@ -35,10 +35,11 @@ function Signup() {
   const passwordInputRef = useRef(null);
   const passwordConfirmInputRef = useRef(null);
 
-  useEffect(() => {
-    setStep("email");
-    setError({ input: null, text: null });
-  }, []);
+  // TODO: Descomentar por las dudas cuando este todo terminado
+  // useEffect(() => {
+  //   setStep("email");
+  //   setError({ input: null, text: null });
+  // }, []);
 
   const checkEmail = async (ev) => {
     ev.preventDefault();
@@ -171,14 +172,14 @@ function Signup() {
         break;
       case "fname":
         if (step === "name") {
-          const newValue = value !== "" ? capitalizeFirstLetter(value) : value;
+          const newValue = value !== "" ? capitalizeWords(value) : value;
           nameInputRef.current.value = newValue;
           setNameInput(newValue);
         }
         break;
       case "lname":
         if (step === "name") {
-          const newValue = value !== "" ? capitalizeFirstLetter(value) : value;
+          const newValue = value !== "" ? capitalizeWords(value) : value;
           lastNameInputRef.current.value = newValue;
           setLastNameInput(newValue);
         }
@@ -194,13 +195,16 @@ function Signup() {
     }
   };
 
-  const capitalizeFirstLetter = (str) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+  const capitalizeWords = (str) => {
+    return str
+      .split(" ")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
   };
 
   return (
-    <section className="w-full grow bg-white">
-      <div className="w-[600px] mx-auto p-10 my-12 text-black border border-black">
+    <section className="w-full grow bg-pagebg">
+      <div className="w-[550px] mx-auto p-10 my-12 bg-white text-black border border-gray-300 shadow-sm rounded-md">
         <h1 className="text-3xl">Registrarse</h1>
         <h2 className="font-thin text-lg mb-10">Ingresá los datos para crear tu cuenta</h2>
         <Step
@@ -221,8 +225,10 @@ function Signup() {
                   onInputChange("email", ev.target.value);
                 }}
                 className={`w-[340px] h-12 mt-1 border ${
-                  error.input === "email" ? "border-red-600" : "border-neutral-400"
-                } px-2 hover:border-black focus:border-black focus:border-2 focus:rounded-md outline-none`}
+                  error.input === "email"
+                    ? "border-red-600"
+                    : "border-gray-400 hover:border-gray-500 focus:border-dewalt"
+                } px-2 rounded-md focus:border-2 outline-none`}
               />
             </>
           }
@@ -246,7 +252,7 @@ function Signup() {
               : "inactive"
           }
           inputs={
-            <div className="w-full flex gap-2">
+            <div className="w-full flex gap-4">
               <div className="w-0 grow">
                 <InputLabel text="Nombre" error={error.input === "fname"} />
                 <input
@@ -257,8 +263,10 @@ function Signup() {
                     onInputChange("fname", ev.target.value);
                   }}
                   className={`w-full h-12 mt-1 border ${
-                    error.input === "fname" ? "border-red-600" : "border-neutral-400"
-                  } px-2 hover:border-black focus:border-black focus:border-2 focus:rounded-md outline-none`}
+                    error.input === "fname"
+                      ? "border-red-600"
+                      : "border-gray-400 hover:border-gray-500 focus:border-dewalt"
+                  } px-2 rounded-md focus:border-2 outline-none`}
                 />
               </div>
               <div className="w-0 grow">
@@ -271,8 +279,10 @@ function Signup() {
                     onInputChange("lname", ev.target.value);
                   }}
                   className={`w-full h-12 mt-1 border ${
-                    error.input === "lname" ? "border-red-600" : "border-neutral-400"
-                  } px-2 hover:border-black focus:border-black focus:border-2 focus:rounded-md outline-none`}
+                    error.input === "lname"
+                      ? "border-red-600"
+                      : "border-gray-400 hover:border-gray-500 focus:border-dewalt"
+                  } px-2 rounded-md focus:border-2 outline-none`}
                 />
               </div>
             </div>
@@ -296,7 +306,7 @@ function Signup() {
               : "inactive"
           }
           inputs={
-            <div className="w-full flex gap-2">
+            <div className="w-full flex gap-4">
               <div className="w-0 grow">
                 <InputLabel text="Contraseña" error={error.input === "password"} />
                 <input
@@ -307,8 +317,10 @@ function Signup() {
                     onInputChange("password", ev.target.value);
                   }}
                   className={`w-full h-12 mt-1 border ${
-                    error.input === "password" ? "border-red-600" : "border-neutral-400"
-                  } px-2 hover:border-black focus:border-black focus:border-2 focus:rounded-md outline-none`}
+                    error.input === "password"
+                      ? "border-red-600"
+                      : "border-gray-400 hover:border-gray-500 focus:border-dewalt"
+                  } px-2 rounded-md focus:border-2 outline-none`}
                 />
               </div>
               <div className="w-0 grow">
@@ -321,8 +333,10 @@ function Signup() {
                     onInputChange("passwordconf", ev.target.value);
                   }}
                   className={`w-full h-12 mt-1 border ${
-                    error.input === "passwordconf" ? "border-red-600" : "border-neutral-400"
-                  } px-2 hover:border-black focus:border-black focus:border-2 focus:rounded-md outline-none`}
+                    error.input === "passwordconf"
+                      ? "border-red-600"
+                      : "border-gray-400 hover:border-gray-500 focus:border-dewalt"
+                  } px-2 rounded-md focus:border-2 outline-none`}
                 />
               </div>
             </div>
@@ -345,9 +359,8 @@ function Signup() {
           inputs={
             <>
               <span className="block mb-8 text-xl">Tu cuenta ha sido creada con éxito!</span>
-              <span>
-                Para terminar, ingresá al link de verificación que te enviamos a:
-                <br />
+              <span className="hyphens-none">
+                Para terminar, ingresá al link de verificación que te enviamos a:{" "}
                 <strong>{emailInput}</strong>
               </span>
             </>
@@ -363,7 +376,7 @@ function Signup() {
 function InputLabel({ text, error }) {
   return (
     <label>
-      <span className={`block text-sm ${error ? "text-red-600" : ""}`}>{text}</span>
+      <span className={`block pl-2 text-sm ${error ? "text-red-600" : ""}`}>{text}</span>
     </label>
   );
 }
@@ -383,15 +396,13 @@ function Step({
 }) {
   return (
     <div
-      className={`w-full ${
-        state === "active" ? "h-[260px]" : "h-12"
-      } overflow-y-hidden px-2 border first:border-t-0 border-black ${
-        state === "done" ? "bg-black border-b-white" : ""
-      } transition-all duration-700`}
+      className={`w-full rounded-b-md ${
+        state === "active" ? "h-[260px] shadow-xl text-black" : "h-12 text-gray-400"
+      } overflow-y-hidden px-2 transition-all duration-700`}
     >
       <div
         className={`h-12 flex items-center [&>*]:transition-all [&>*]:duration-700 ${
-          state === "done" ? "text-dewalt" : ""
+          state === "done" ? "text-dewalt font-semibold" : ""
         }`}
       >
         {icon}
@@ -399,7 +410,7 @@ function Step({
       </div>
       <form
         onSubmit={(ev) => onSubmit(ev)}
-        className={`mt-5 ${state === "done" || state === "inactive" ? "hidden" : ""}`}
+        className={`mt-5 p-2 ${state === "done" || state === "inactive" ? "hidden" : ""}`}
       >
         {inputs}
         <div className="w-full h-10 flex items-end">
@@ -424,9 +435,9 @@ function Step({
               loading || accountCreated
                 ? "bg-black text-dewalt"
                 : submitable
-                ? "bg-black text-white hover:text-dewalt active:pt-1"
+                ? "bg-dewalt text-black hover:bg-black hover:text-dewalt active:pt-1"
                 : "bg-neutral-300 text-neutral-500"
-            }`}
+            } rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-black`}
           >
             <span
               className={`transition-all duration-300 ${

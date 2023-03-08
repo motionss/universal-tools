@@ -2,7 +2,7 @@ import Card from "./utils/Card";
 
 function Categories() {
   return (
-    <section className="w-full bg-white">
+    <section className="w-full bg-pagebg">
       <div className="w-content-max-width mx-auto text-black">
         <img
           src="herramientas-banner.webp"
@@ -19,39 +19,28 @@ function Categories() {
             <Card
               img="https://bynder.sbdinc.com/m/35fdf9cc01fd1f62/Drupal_Small-DWHT0-20544_2.jpg"
               title="Herramientas Manuales"
-              link="/catalogue?q=manuales"
+              link="/catalogue/herramientas-manuales"
             />
             <Card
               img="https://bynder.sbdinc.com/m/340b7afb8bca1ec9/Drupal_Small-DCD795P2_F1.jpg"
               title="Herramientas Eléctricas"
-              link="/catalogue?q=electricas"
+              link="/catalogue/herramientas-electricas"
             />
             <Card
               img="https://bynder.sbdinc.com/m/87add7bcfcef6d95/Drupal_Small-DT99560_1.jpg"
               title="Accesorios e Insumos"
-              link="/catalogue?q=accesorios"
+              link="/catalogue/accesorios-e-insumos"
             />
             <Card
               img="https://www.dewalt.es/EMEA/PRODUCT/IMAGES/HIRES/DCB184G-XJ/DCB184G_1.jpg?resize=530x530"
               title="Baterías y Cargadores"
-              link="/catalogue?q=baterias"
+              link="/catalogue/baterias-y-cargadores"
             />
           </div>
         </div>
-        <div className="w-full h-40 my-6 flex gap-6">
-          <div
-            className="h-full grow basis-0 p-3 border border-neutral-400 
-                       flex justify-center items-center hover:shadow-lg transition-all duration-300"
-          >
-            <p className="text-lg">Comprá tranquilo</p>
-          </div>
-
-          <div
-            className="h-full grow basis-0 p-3 border border-neutral-400 
-                       flex justify-center items-center hover:shadow-lg transition-all duration-300"
-          >
-            <p className="text-lg">Envíos a todo el país</p>
-          </div>
+        <div className="w-full h-40 my-2 flex gap-6">
+          <Card title="Comprá tranquilo" grow={false} />
+          <Card title="Envíos a todo el país" grow={false} />
         </div>
         <div className="pt-10 pb-6">
           <p className="mb-4 font-sans-condensed text-black text-4xl font-bold">

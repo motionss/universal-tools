@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { MdSearch } from "react-icons/md";
@@ -11,6 +11,8 @@ function Topbar() {
   const { firebase } = useAuthContext();
   const navigate = useNavigate();
   const user = firebase.user;
+
+  const [showUserOptions, setShowUserOptions] = useState(false);
 
   const searchInput = useRef(null);
   const subMenu = [
@@ -41,7 +43,7 @@ function Topbar() {
   };
 
   return (
-    <header className="w-full mx-auto">
+    <header className="w-full mx-auto bg-black">
       <div className="w-full max-w-content-max-width mx-auto h-topbar-height relative flex">
         <Link to="/" className="min-w-[210px] h-full mr-3">
           <img
@@ -52,29 +54,32 @@ function Topbar() {
         </Link>
         <div className="h-full ml-10 flex items-center">
           <form
-            className="flex group"
+            className="flex group shadow-sm shadow-neutral-300"
             onSubmit={(ev) => {
               console.log(searchInput.current.value);
-              navigate(`/catalogue?s=${searchInput.current.value.replaceAll(" ", "-")}`);
+              navigate(`/catalogue/${searchInput.current.value.replaceAll(" ", "-")}`);
               ev.preventDefault();
               return;
             }}
           >
             <input
               type="text"
-              className="w-[500px] h-10 px-3 outline-none text-base border-solid border border-neutral-500 
-                        group-focus-within:border-neutral-300 transition-all border-r-0
-                        placeholder-neutral-600"
+              className="w-[500px] h-10 px-3 text-white outline-none border border-r-0 border-gray-500 
+                        group-focus-within:border-gray-300 rounded-l-sm
+                        placeholder-neutral-400 transition-all"
               placeholder="Buscar productos..."
               ref={searchInput}
             />
             <button
               type="submit"
-              className="w-max h-10 pr-2 border-solid border border-neutral-500 
-                         group-focus-within:border-neutral-300 transition-all border-l-0
-                         text-dewalt hover:text-amber-200"
+              className="w-max h-10 pr-2 border border-l-0 border-gray-500 
+                         group-focus-within:border-gray-300 rounded-r-sm
+                         text-dewalt hover:text-amber-200 transition-all"
             >
-              <MdSearch size="28" className="pl-3 border-l border-neutral-500" />
+              <MdSearch
+                size="28"
+                className="pl-3 border-l border-gray-500 group-focus-within:border-gray-300 transition-all"
+              />
             </button>
           </form>
         </div>
@@ -83,7 +88,7 @@ function Topbar() {
             <>
               <Link
                 className="h-full p-4 flex items-center text-dewalt border-solid border-white30
-                      hover:text-white active:pb-3 cursor-pointer transition-all"
+                      hover:text-white cursor-pointer transition-all"
                 to="/signup"
               >
                 {/* <FiLogIn className="w-7 mr-3" size="26" /> */}
@@ -91,7 +96,7 @@ function Topbar() {
               </Link>
               <Link
                 className="h-full p-4 flex items-center text-neutral-300 border-solid border-white30
-                      hover:text-white active:pb-3 cursor-pointer transition-all"
+                      hover:text-white cursor-pointer transition-all"
                 to="/login/user"
               >
                 {/* <FiLogIn className="w-7 mr-3" size="26" /> */}
@@ -99,23 +104,57 @@ function Topbar() {
               </Link>
             </>
           ) : (
-            <Link
-              className="h-full p-4 flex items-center text-neutral-300 border-solid border-white30
-                      hover:text-white active:pb-3 cursor-pointer transition-all"
-              to="/login"
+            <div
+              type="button"
+              className="w-max h-full relative p-4 flex items-center text-neutral-300 border-solid border-white30
+                      hover:text-white cursor-pointer transition-all"
+              onMouseEnter={() => setShowUserOptions(true)}
+              onMouseLeave={() => setShowUserOptions(false)}
             >
               <BsPersonCircle className="w-7 mr-3" size="26" />
               <div className="select-none text-sm flex items-center gap-1">
                 {user.displayName.split(" ")[0]}
                 <FiChevronDown size="14" />
               </div>
-            </Link>
+              <div
+                className={`absolute top-full right-4 h-max bg-white text-black text-sm z-50 rounded-b-md 
+                            border border-t-0 border-gray-300 shadow-xl drop-shadow-xl transition-all
+                            ${
+                              showUserOptions
+                                ? "w-60 opacity-100 pointer-events-auto"
+                                : "w-48 opacity-0 pointer-events-none"
+                            }`}
+              >
+                <Link
+                  to={"/user/purchases"}
+                  className="w-full h-10 pr-4 flex justify-end items-center 
+                             hover:bg-gray-100 hover:shadow-md hover:font-semibold"
+                >
+                  Mis compras
+                </Link>
+                <Link
+                  to={"/user/purchases"}
+                  className="w-full h-10 pr-4 flex justify-end items-center 
+                             hover:bg-gray-100 hover:shadow-md hover:font-semibold"
+                >
+                  Mi perfil
+                </Link>
+                <button
+                  type="button"
+                  className="w-full h-10 pr-4 flex justify-end items-center border-t border-gray-300 
+                             hover:bg-gray-100 hover:shadow-md hover:font-semibold"
+                  onClick={signOut}
+                >
+                  Cerrar sesión
+                </button>
+              </div>
+            </div>
           )}
           <Link
-            onClick={signOut}
+            to="/cart"
             title="Carrito"
             className="h-full p-4 pr-0 flex items-center text-neutral-300 border-solid border-white30
-                      hover:text-white active:pb-3 cursor-pointer transition-all"
+                      hover:text-white cursor-pointer transition-all"
           >
             <FiShoppingCart className="w-6" size="23" />
           </Link>
@@ -157,7 +196,7 @@ function LowerButton({ text, link, subMenu }) {
           <FiChevronDown size="20" className="ml-1" />
           <div
             className="absolute z-10 left-0 top-full w-64 h-max py-3 flex flex-col bg-black
-                       opacity-0 pointer-events-none group-hover:w-80
+                       opacity-0 pointer-events-none group-hover:w-80 border border-t-0 border-dewalt
                        group-hover:opacity-100 group-hover:pointer-events-auto transition-all"
           >
             {subMenu.map((v, i) => {
@@ -166,7 +205,7 @@ function LowerButton({ text, link, subMenu }) {
                 <SubTag
                   to={SubTag === Link ? v.link : ""}
                   className="min-w-max h-9 px-6 relative flex items-center text-start
-                            text-white hover:text-black hover:bg-white select-none group/sub"
+                            text-white hover:text-black hover:bg-dewalt hover:font-semibold select-none group/sub"
                   key={i}
                 >
                   {v.title}
@@ -176,15 +215,15 @@ function LowerButton({ text, link, subMenu }) {
                     <>
                       <FiChevronRight size="20" className="absolute w-max right-2 top-2" />
                       <div
-                        className="absolute z-10 left-full -top-3 w-64 h-max py-3 flex flex-col bg-white
-                                  opacity-0 pointer-events-none group-hover/sub:w-80
+                        className="absolute z-10 left-full -top-3 w-64 h-max py-3 flex flex-col bg-dewalt
+                                  opacity-0 pointer-events-none group-hover/sub:w-80 border border-l-0 border-black
                                   group-hover/sub:opacity-100 group-hover/sub:pointer-events-auto transition-all"
                       >
                         {v.subMenu.map((v, i) => (
                           <Link
                             to={v.link}
-                            className="min-w-max h-9 px-5 relative text-start text-black select-none
-                                    hover:text-white hover:bg-black flex items-center"
+                            className="min-w-max h-9 px-5 relative text-start font-normal text-black select-none
+                                    hover:text-white hover:bg-black hover:font-semibold flex items-center"
                             key={i}
                           >
                             {v.title}

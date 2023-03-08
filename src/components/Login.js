@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import { BsPersonCircle } from "react-icons/bs";
@@ -221,22 +221,22 @@ function Login({ step }) {
   };
 
   return (
-    <section className="w-full grow bg-white">
+    <section className="w-full grow bg-pagebg">
       <div className="w-[900px] mx-auto py-12 flex text-black">
         <div className="w-0 grow">
-          <h1 className="font-thin text-4xl pb-4">
+          <h1 className="font-light text-4xl pb-4">
             Ingresá tu {step === "email" ? "e-mail" : step === "password" ? "contraseña" : "?"}
           </h1>
           {step === "password" ? (
             <div
               className="w-72 h-12 mb-3 py-2 flex items-center
-                         border border-black"
+                         bg-white rounded-md border border-gray-300 shadow-sm"
             >
               <BsPersonCircle className="w-6 h-6 mx-4 text-neutral-400" />
               <div className="grow flex flex-col">
                 <span className="text-xs">{emailInput}</span>
                 <Link
-                  className="w-max text-xs text-dewalt hover:text-amber-600 transition-all"
+                  className="w-max text-xs font-semibold text-amber-600 transition-all"
                   to="/login/user"
                 >
                   Entrar a otra cuenta
@@ -253,8 +253,8 @@ function Login({ step }) {
           </div>
           <button
             type="button"
-            className="w-72 h-12 mb-8 py-2 flex items-center 
-                       border border-black hover:bg-black hover:text-white transition-all"
+            className="w-72 h-12 mb-8 py-2 bg-white flex items-center 
+                       border border-gray-300 shadow-sm rounded-md hover:shadow-lg hover:border-dewalt hover:text-amber-500 transition-all"
             onClick={handleGoogleLogin}
           >
             <img src="/google.svg" className="w-6 h-6 mx-4 object-contain" alt="Google" />
@@ -289,11 +289,15 @@ function Login({ step }) {
           )}
         </div>
         <div className="w-0 grow-[1.2]">
-          <form onSubmit={handleCredentialsLogin} className="w-full p-10 pt-12 border border-black">
+          <form
+            onSubmit={handleCredentialsLogin}
+            className="w-full p-10 pt-12 bg-white border border-gray-300 rounded-md shadow-sm"
+          >
             <div
               className={`w-full ${
-                showVerified ? "h-12 mb-5" : "h-0 mb-0"
-              } pl-3 font-bold bg-black text-dewalt flex items-center overflow-y-hidden transition-all duration-500`}
+                showVerified ? "h-12 mb-5 border" : "h-0 mb-0 border-0"
+              } pl-3 font-bold text-dewalt border-gray-400 rounded-md shadow-md
+              flex items-center overflow-y-hidden transition-all duration-500`}
             >
               <MdOutlineVerifiedUser className="w-6 h-6 mr-2" />
               <span className="block">Tu cuenta ha sido verificada!</span>
@@ -301,7 +305,7 @@ function Login({ step }) {
                 <button
                   type="button"
                   onClick={() => setShowVerified(!showVerified)}
-                  className="w-max h-max mr-3 hover:bg-dewalt hover:text-black transition-all"
+                  className="w-max h-max mr-3 hover:text-black transition-all"
                 >
                   <MdClose className="w-6 h-6" />
                 </button>
@@ -323,8 +327,8 @@ function Login({ step }) {
                   setEmailInput(ev.target.value);
                 }}
                 className={`w-full h-12 border ${
-                  error.input === "email" ? "border-red-600" : "border-neutral-400"
-                } px-3 hover:border-black focus:border-black focus:border-2 focus:rounded-md outline-none`}
+                  error.input === "email" ? "border-red-600" : "border-gray-400"
+                } px-3 rounded-md hover:border-gray-500 focus:border-dewalt focus:border-2 outline-none`}
               />
             </div>
             <div className={`${step !== "password" ? "hidden" : ""}`}>
@@ -347,7 +351,7 @@ function Login({ step }) {
                 disabled={step !== "password"}
                 className={`w-full h-12 border ${
                   error.input === "password" ? "border-red-600" : "border-neutral-400"
-                } px-3 hover:border-black focus:border-black focus:border-2 focus:rounded-md outline-none`}
+                } px-3 rounded-md hover:border-black focus:border-dewalt focus:border-2 outline-none`}
               />
             </div>
             <div
@@ -369,7 +373,7 @@ function Login({ step }) {
                       (step === "password" && passwordInput !== "")
                     ? "bg-dewalt text-black hover:bg-black hover:text-dewalt active:pt-1"
                     : "bg-neutral-300 text-neutral-500"
-                }`}
+                } rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-black`}
               >
                 <span
                   className={`transition-all duration-300 ${

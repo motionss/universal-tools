@@ -1,5 +1,3 @@
-import React from "react";
-
 import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -97,7 +95,7 @@ function RoundedButton({ logo, link }) {
       <a
         className="w-8 h-8 flex items-center justify-center transition-all relative z-10 text-black hover:text-white
                    before:absolute before:w-full before:h-full before:border-[16px] before:border-white before:rounded-3xl
-                   before:hover:border before:transition-all"
+                   before:hover:border before:transition-all before:duration-300"
         href={link}
         target="_blank"
         rel="noreferrer"

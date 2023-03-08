@@ -12,6 +12,7 @@ module.exports = {
         neutral: {
           950: "#0c0c0c",
         },
+        pagebg: "#ebebeb",
       },
       spacing: {
         "topbar-height": "var(--topbar-height)",
@@ -25,5 +26,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-hyphens")],
+  plugins: [require("tailwindcss-hyphens"), require("@tailwindcss/line-clamp")],
 };
