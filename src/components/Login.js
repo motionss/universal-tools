@@ -222,8 +222,8 @@ function Login({ step }) {
 
   return (
     <section className="w-full grow bg-pagebg">
-      <div className="w-[900px] mx-auto py-12 flex text-black">
-        <div className="w-0 grow">
+      <div className="w-full px-4 lg:w-[900px] lg:mx-auto py-12 flex flex-col lg:flex-row text-black">
+        <div className="w-full lg:w-0 lg:grow">
           <h1 className="font-light text-4xl pb-4">
             Ingresá tu {step === "email" ? "e-mail" : step === "password" ? "contraseña" : "?"}
           </h1>
@@ -270,7 +270,7 @@ function Login({ step }) {
           </a> */}
           {/* <div className="w-60 h-[1px] bg-neutral-300" /> */}
           {step === "password" ? (
-            <>
+            <div className="mb-8">
               <span className="block font-bold text-sm mb-1">Necesito ayuda</span>
               <button
                 onClick={handleForgotPass}
@@ -283,12 +283,12 @@ function Login({ step }) {
                 />
                 <span className="text-sm select-none">Olvidé mi contraseña</span>
               </button>
-            </>
+            </div>
           ) : (
             ""
           )}
         </div>
-        <div className="w-0 grow-[1.2]">
+        <div className="w-full lg:w-0 lg:grow-[1.2]">
           <form
             onSubmit={handleCredentialsLogin}
             className="w-full p-10 pt-12 bg-white border border-gray-300 rounded-md shadow-sm"

@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 function NotFound() {
   return (
-    <div className="w-full grow flex flex-col justify-start items-center bg-pagebg text-black">
-      <MdErrorOutline className="w-28 h-28 mt-16 text-gray-400" />
+    <div className="w-full py-16 grow flex flex-col justify-start items-center bg-pagebg text-black">
+      <MdErrorOutline className="w-28 h-28 text-gray-400" />
       <p className="mt-3 text-xl">La página que buscas no existe :(</p>
       <Link to="/" className="mt-4 text-gray-500">
         Ir a la página principal

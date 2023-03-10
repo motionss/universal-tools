@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="w-content-max-width mx-auto">
-      <div className="w-full py-8 h-64 flex items-center">
-        <div className="w-60 shrink-0">
+    <footer className="w-full px-4 xl:px-0 xl:w-content-max-width xl:mx-auto">
+      <div className="w-full xl:py-8 flex flex-col xl:flex-row items-center">
+        <div className="w-60 py-8 xl:py-0 h-max shrink-0">
           <img
             src="/universal-tools-logo.svg"
             className="h-28 px-7 object-contain"
@@ -30,15 +30,15 @@ function Footer() {
             />
           </div>
         </div>
-        <div className="h-full grow flex py-2 ml-10 text-sm text-neutral-300">
-          <div className="grow basis-0 h-full">
+        <div className="w-full h-max xl:h-52 xl:w-0 xl:grow flex flex-col xl:flex-row xl:py-2 xl:ml-10 text-sm text-neutral-300">
+          <div className="w-full px-6 xl:px-0 xl:w-0 xl:grow basis-0 h-full">
             <p className="font-bold pb-2 font-sans-condensed text-lg">ACERCA DE UNIVERSAL TOOLS</p>
             <LinkTo text="¿Quiénes somos?" link="/faq/quienes-somos" />
             <LinkTo text="Preguntas frecuentes" link="/faq" />
             <LinkTo text="Terminos y condiciones" link="/faq/terms" />
           </div>
-          <div className="w-[1px] bg-white h-full mx-10" />
-          <div className="grow basis-0 h-full">
+          <div className="w-full xl:w-[1px] h-[1px] xl:h-full bg-white my-6 xl:my-0 xl:mx-10" />
+          <div className="w-full px-6 xl:px-0 xl:grow basis-0 h-full">
             <p className="font-bold pb-2 font-sans-condensed text-lg">CONTACTO</p>
             <a className="pb-2 w-max hover:text-white" href="tel:11 6547-5458">
               (11) 6547-5458
@@ -55,15 +55,19 @@ function Footer() {
               Villa Insuperable, Buenos Aires
             </a>
           </div>
-          <div className="w-[1px] bg-white h-full mx-10" />
-          <div className="grow basis-0 h-full flex flex-col">
+          <div className="w-full xl:w-[1px] h-[1px] xl:h-full bg-white my-6 xl:my-0 xl:mx-10" />
+          <div className="w-full px-6 pb-6 xl:px-0 xl:pb-0 xl:grow basis-0 h-full flex flex-col">
             <p className="font-bold pb-2 font-sans-condensed text-lg">COMPRÁ CON SEGURIDAD</p>
             <LinkTo text="¿Cómo comprar?" link="/faq/como-comprar" />
             <LinkTo text="Métodos de pago" link="/faq/metodos-de-pago" />
             <LinkTo text="Formas de envío" link="/faq/envio" />
-            <div className="h-16 flex items-center mb-6">
-              <div className="w-fit h-12 pr-16">
-                <img className="h-full object-contain" src="/mercado-pago.png" alt="Mercado Pago" />
+            <div className="w-full h-16 flex items-center mb-6">
+              <div className="w-full h-12 flex justify-start">
+                <img
+                  className="w-max h-full object-contain"
+                  src="/mercado-pago.png"
+                  alt="Mercado Pago"
+                />
               </div>
               <img
                 className="w-max h-full object-contain"

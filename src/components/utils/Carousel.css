@@ -1,0 +1,11 @@
+.carousel_button {
+  @apply absolute top-0 -translate-y-1/2 w-8 xl:w-16 aspect-square 
+  rounded-full bg-black bg-opacity-50 hover:bg-opacity-100 active:bg-opacity-75
+  opacity-100 pointer-events-auto xl:opacity-0 xl:pointer-events-none group-hover/container:opacity-100 group-hover/container:pointer-events-auto
+  focus-visible:opacity-100 focus-visible:pointer-events-auto transition-all;
+}
+
+.carousel_button_icon {
+  @apply w-full h-full p-2 xl:p-4 text-white text-opacity-50 group-hover:text-opacity-100 group-active:bg-opacity-75 
+         transition-all -ml-[1px];
+}

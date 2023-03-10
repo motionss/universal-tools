@@ -204,8 +204,8 @@ function Signup() {
 
   return (
     <section className="w-full grow bg-pagebg">
-      <div className="w-[550px] mx-auto p-10 my-12 bg-white text-black border border-gray-300 shadow-sm rounded-md">
-        <h1 className="text-3xl">Registrarse</h1>
+      <div className="mx-4 xl:w-[550px] xl:mx-auto p-4 my-12 bg-white text-black border border-gray-300 shadow-sm rounded-md">
+        <h1 className="text-3xl mt-4 xl:mt-0">Registrarse</h1>
         <h2 className="font-thin text-lg mb-10">Ingresá los datos para crear tu cuenta</h2>
         <Step
           icon={<MdMailOutline size="20" className="w-8 h-8" />}

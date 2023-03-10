@@ -279,10 +279,12 @@ function Product({ info, view }) {
       </div>
       <button
         type="button"
-        className="absolute top-0 right-0 w-6 h-6 m-4 text-dewalt opacity-0 pointer-events-none 
-                   group-hover:opacity-100 group-hover:pointer-events-auto transition-all
-                   before:absolute before:-top-1/4 before:-left-1/4 before:w-[150%] before:h-[150%]
-                   before:bg-white before:bg-opacity-50 before:rounded-3xl"
+        className={`absolute top-0 right-0 w-6 h-6 m-4 text-dewalt ${
+          !favorite
+            ? "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
+            : ""
+        } before:absolute before:-top-1/4 before:-left-1/4 before:w-[150%] before:h-[150%]
+        before:bg-white before:bg-opacity-50 before:rounded-3xl transition-all`}
         onClick={updateFavorite}
       >
         <MdFavoriteBorder className="relative w-full h-full" />

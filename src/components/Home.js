@@ -3,8 +3,8 @@ import Card from "./utils/Card";
 
 function Home() {
   return (
-    <div className="w-full">
-      <section className="w-full h-[480px] overflow-hidden">
+    <div className="w-full bg-pagebg">
+      <section className="w-full aspect-[3/1] xl:aspect-[6/1] overflow-hidden">
         <Carousel
           images={[
             "https://somosferreteria.cl/wp-content/uploads/2021/09/Banner_Dewalt_2.jpg",
@@ -14,14 +14,14 @@ function Home() {
           ]}
         />
       </section>
-      <section className="w-full bg-pagebg">
-        <div className="w-content-max-width mx-auto">
-          <div className="pt-20 pb-4">
-            <h1 className="font-sans-condensed text-black text-4xl font-bold">
-              CATEGORÍAS POPULARES
-            </h1>
-          </div>
-          <div className="flex justify-around gap-6 pb-12">
+      <section className="w-full xl:w-content-max-width mx-auto">
+        <div className="px-4 pt-10 xl:px-0 xl:pt-20 pb-4">
+          <h1 className="font-sans-condensed text-black text-xl xl:text-4xl font-bold">
+            CATEGORÍAS POPULARES
+          </h1>
+        </div>
+        <div className="w-full mb-8 xl:w-full overflow-x-scroll">
+          <div className="w-[640px] px-4 xl:px-0 xl:w-full h-max flex justify-around gap-2 pb-12">
             <Card
               img="https://bynder.sbdinc.com/m/35fdf9cc01fd1f62/Drupal_Small-DWHT0-20544_2.jpg"
               title="Herramientas Manuales"

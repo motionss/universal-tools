@@ -26,5 +26,12 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-hyphens"), require("@tailwindcss/line-clamp")],
+  plugins: [
+    require("tailwindcss-hyphens"),
+    require("@tailwindcss/line-clamp"),
+    require("tailwind-scrollbar-hide"),
+  ],
+  module: {
+    loaders: [{ test: /\.css$/, loader: "style-loader!css-loader" }],
+  },
 };

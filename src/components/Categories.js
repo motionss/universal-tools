@@ -3,19 +3,23 @@ import Card from "./utils/Card";
 function Categories() {
   return (
     <section className="w-full bg-pagebg">
-      <div className="w-content-max-width mx-auto text-black">
-        <img
-          src="herramientas-banner.webp"
-          className="w-full h-32 object-cover select-none"
-          alt="Banner Herramientas"
-        />
-        <h1 className="w-max mx-auto my-3">LA CALIDAD MÁS ALTA EN HERRAMIENTAS</h1>
-        <div className="w-[500px] mx-auto h-[1px] mb-6 bg-neutral-300" />
-        <div className="pt-10 pb-6">
-          <p className="mb-4 font-sans-condensed text-black text-4xl font-bold">
+      <img
+        src="herramientas-banner.webp"
+        className="w-full aspect-[8/1] xl:w-max xl:min-h-32 mx-auto object-cover xl:object-contain select-none"
+        alt="Banner Herramientas"
+      />
+      <div className="w-full xl:w-content-max-width xl:mx-auto text-black">
+        <h1 className="w-max mx-auto my-2 xl:my-3 text-xs xl:text-base">
+          LA CALIDAD MÁS ALTA EN HERRAMIENTAS
+        </h1>
+        <div className="w-1/2 xl:w-[500px] mx-auto h-[1px] bg-neutral-300" />
+        <div className="px-4 pt-10 xl:px-0 xl:pt-20 pb-2 xl:pb-4">
+          <h1 className="font-sans-condensed text-black text-xl xl:text-4xl font-bold">
             CATEGORÍAS POPULARES
-          </p>
-          <div className="flex justify-around gap-6">
+          </h1>
+        </div>
+        <div className="w-full xl:w-full overflow-x-scroll scrollbar-hide">
+          <div className="w-[640px] px-4 xl:px-0 xl:w-full h-max flex justify-around gap-2 pb-2">
             <Card
               img="https://bynder.sbdinc.com/m/35fdf9cc01fd1f62/Drupal_Small-DWHT0-20544_2.jpg"
               title="Herramientas Manuales"
@@ -38,23 +42,25 @@ function Categories() {
             />
           </div>
         </div>
-        <div className="w-full h-40 my-2 flex gap-6">
-          <Card title="Comprá tranquilo" grow={false} />
-          <Card title="Envíos a todo el país" grow={false} />
+        <div className="w-full h-20 xl:h-40 flex gap-2 px-4 xl:px-0">
+          <Card title="Comprá tranquilo (img)" grow={false} />
+          <Card title="Envíos a todo el país (img)" grow={false} />
         </div>
-        <div className="pt-10 pb-6">
-          <p className="mb-4 font-sans-condensed text-black text-4xl font-bold">
+        <div className="pt-10 pb-6 px-4 xl:px-0">
+          <h2 className="pb-2 xl:pb-4 font-sans-condensed text-black text-xl xl:text-4xl font-bold">
             LAS MEJORES MARCAS
-          </p>
-          <div className="flex justify-around gap-6 pb-12">
+          </h2>
+          <div className="flex justify-around gap-2 pb-6">
             <Card square={true} img="dewalt.png" link="/catalogue?br=dewalt" />
             <Card square={true} img="stanley.png" link="/catalogue?br=stanley" />
-            <Card square={true} img="cat.webp" link="/catalogue?br=cat" />
+            <Card square={true} img="cat.png" link="/catalogue?br=cat" />
           </div>
         </div>
-        <div className="pb-6">
-          <p className="mb-4 font-sans-condensed text-black text-3xl">Todas las categorías</p>
-          <p>TODO: Mostrar todas las categorías</p>
+        <div className="pb-6 px-4 xl:px-0">
+          <p className="mb-4 font-sans-condensed text-black text-xl xl:text-3xl">
+            Todas las categorías
+          </p>
+          <p className="text-sm xl:text-base">TODO: Mostrar todas las categorías</p>
         </div>
       </div>
     </section>

@@ -1,9 +1,13 @@
 import { useState, useMemo } from "react";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 
+import "./Carousel.css";
+
 function Carousel({ images, startingIndex }) {
   const [items, setItems] = useState([]);
   const [activeItem, setActiveItem] = useState(0);
+
+  // TODO: Hacer el timer para que cambie solo
 
   useMemo(() => {
     setItems(
@@ -29,49 +33,37 @@ function Carousel({ images, startingIndex }) {
       {items.map((v, i) => {
         return <Item key={i} link={v.link} visible={v.visible} position={v.position} />;
       })}
-      <div className="absolute h-2 left-1/2 -translate-x-1/2 bottom-4 flex justify-around gap-4">
+      <div className="absolute h-max left-1/2 -translate-x-1/2 scale-50 bottom-1 xl:scale-100 xl:bottom-4 flex justify-around gap-2">
         {items.map((v, i) => (
           <button
             key={i}
-            className={`w-10 h-full bg-white transition-all duration-500 ${
-              items.findIndex((i) => i.position === 0) === i ? "bg-opacity-100" : "bg-opacity-30"
-            }`}
+            className={`h-2 bg-white transition-all duration-500 ${
+              items.findIndex((i) => i.position === 0) === i
+                ? "w-4 bg-opacity-100 drop-shadow-lg"
+                : "w-2 bg-opacity-20 border border-white shadow-sm"
+            } rounded-3xl`}
             onClick={() => {
               if (i !== activeItem) onSelector(i, i - activeItem);
             }}
           />
         ))}
       </div>
-      <div
-        className="absolute w-[calc(100%+200px)] group-hover/container:w-full h-16 top-1/2 -translate-y-1/2 left-0 
-                   -translate-x-[100px] group-hover/container:-translate-x-0 group-hover/container:px-8 
-                   flex justify-between transition-all"
-      >
+      <div className="absolute w-full h-0 top-1/2 left-0 flex justify-between transition-all">
         <button
-          className="w-16 h-16 rounded-full bg-black bg-opacity-50 hover:bg-opacity-100 active:bg-opacity-75 
-                     group transition-all"
+          className="carousel_button left-0 translate-x-1/2 group"
           onClick={() => {
             onSelector(activeItem === 0 ? items.length - 1 : activeItem - 1, 1);
           }}
         >
-          <HiOutlineChevronLeft
-            size="36"
-            className="text-white text-opacity-50 group-hover:text-opacity-100 group-active:bg-opacity-75 
-                       transition-all -ml-[1px]"
-          />
+          <HiOutlineChevronLeft className="carousel_button_icon" />
         </button>
         <button
-          className="w-16 h-16 rounded-full bg-black bg-opacity-50 hover:bg-opacity-90 active:bg-opacity-75 
-                     group transition-all"
+          className="carousel_button right-0 -translate-x-1/2 group"
           onClick={() => {
             onSelector(activeItem === items.length - 1 ? 0 : activeItem + 1, -1);
           }}
         >
-          <HiOutlineChevronRight
-            size="36"
-            className="text-white text-opacity-50 group-hover:text-opacity-100 group-active:bg-opacity-75 
-                       transition-all -ml-[1px]"
-          />
+          <HiOutlineChevronRight className="carousel_button_icon" />
         </button>
       </div>
     </div>
@@ -84,7 +76,7 @@ function Item({ link, position }) {
       src={link}
       alt="hola"
       draggable="false"
-      style={{ transform: `translateX(${window.screen.width * position}px)` }}
+      style={{ transform: `translateX(${window.innerWidth * position}px)` }}
       className="absolute h-full transition-all duration-500"
     />
   );
